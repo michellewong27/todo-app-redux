@@ -1,5 +1,4 @@
 //this file contains the todo list component
-
 import React, { Component } from "react";
 import {
     withStyles,
@@ -15,6 +14,9 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+import ACTIONS from "../modules/action";
+import { connect } from "react-redux";
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -24,7 +26,7 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper
     },
     title: {
-        margin: `${theme.spacing.unit * 4}px 0 ${theme.space.unit * 2}px`
+        margin: `${theme.spacing.unit * 4}px 0 ${theme.spacing.unit * 2}px`
     }
 });
 
@@ -53,15 +55,14 @@ class ToDo extends Component {
         });
         if(this.state.item !== ""){
             //add the task to the store
-
+            this.props.createItem(this.state.item);
         }
         event.preventDefault()
     };
 
     handleDelete=(event)=>{
-        this.setState({
-            [event.target.name]: event.target.value
-        })
+         // delete the item from the store
+        this.props.deleteItem(event.target.value);
     };
 
     handleChange=(event)=>{
@@ -104,4 +105,17 @@ class ToDo extends Component {
         );
     }
 }
-export default withStyles(styles)(toDo);
+
+const mapStateToProps = state => ({
+    items: state.items
+  });
+  
+  const mapDispatchToProps = dispatch => ({
+    createItem: item => dispatch(ACTIONS.createItem(item)),
+    deleteItem: id => dispatch(ACTIONS.deleteItem(id))
+  });
+  
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+) (withStyles(styles)(ToDo));
