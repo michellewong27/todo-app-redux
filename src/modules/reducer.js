@@ -10,7 +10,9 @@ const defaultState = {
 };
 
 const todoReducter = (state= defaultState, action) => {
+    //switch case based on action.type that is inputed
     switch(action.type){
+        //if action type is create item -> add new item to items
         case ACTIONS.Types.CREATE_ITEM: {
             console.log(action);
 
@@ -21,6 +23,7 @@ const todoReducter = (state= defaultState, action) => {
             newState.items.push(newItem);
             return newState;
         }
+        //if action type is delete item -> get id of that item, & remove from items state
         case ACTIONS.Types.DELETE_ITEM: {
             let newState = _.cloneDeep(state);
             let index = _.findIndex(newState.items, {id: action.payload});
